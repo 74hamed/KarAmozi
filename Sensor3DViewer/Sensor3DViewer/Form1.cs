@@ -32,7 +32,7 @@ namespace Sensor3DViewer
         private void InitRenderLoop()
         {
             renderTimer = new Timer();
-            renderTimer.Interval = 16; // 60 FPS
+            renderTimer.Interval = 16; //60 FPS
             renderTimer.Tick += (sender, e) => openGLControl.Invalidate();
             renderTimer.Start();
         }
@@ -40,7 +40,7 @@ namespace Sensor3DViewer
         private void InitSensorSimulation()
         {
             sensorUpdateTimer = new Timer();
-            sensorUpdateTimer.Interval = 5; // Update every 100 ms
+            sensorUpdateTimer.Interval = 5; // update every 5ms
             sensorUpdateTimer.Tick += SensorUpdateTimer_Tick;
             sensorUpdateTimer.Start();
         }
@@ -48,11 +48,11 @@ namespace Sensor3DViewer
         private void SensorUpdateTimer_Tick(object sender, EventArgs e)
         {
 
-            roll += 1.0f; // speed of rotation :
+            roll += 1.0f; // speed of rotation
             pitch += 0.5f;
             yaw += 0.2f;
 
-            // values should be within 0-360 
+            // values should be within 0-360
             roll = roll % 360;
             pitch = pitch % 360;
             yaw = yaw % 360;
@@ -82,16 +82,23 @@ namespace Sensor3DViewer
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
             gl.LoadIdentity();
 
-
-            gl.Translate(0.0f, 0.0f, -5.0f);
-
-
+            //first cube to the left
+            gl.PushMatrix();
+            gl.Translate(-2.0f, 0.0f, -8.0f); //location
             gl.Rotate(roll, 1.0f, 0.0f, 0.0f);
             gl.Rotate(pitch, 0.0f, 1.0f, 0.0f);
             gl.Rotate(yaw, 0.0f, 0.0f, 1.0f);
-
-
             DrawCube(gl);
+            gl.PopMatrix();
+
+            //second cube to the right
+            gl.PushMatrix();
+            gl.Translate(2.0f, 0.0f, -8.0f); //location
+            gl.Rotate(roll, 1.0f, 0.0f, 0.0f);
+            gl.Rotate(pitch, 0.0f, 1.0f, 0.0f);
+            gl.Rotate(yaw, 0.0f, 0.0f, 1.0f);
+            DrawCube(gl);
+            gl.PopMatrix();
 
             gl.Flush();
         }
